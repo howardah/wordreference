@@ -1,2 +1,2 @@
 # wordreference
- A Node implimentation of n-wissam's wordreference python script
+A Node solution for retrieving wordreference translations
