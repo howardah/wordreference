@@ -1,0 +1,25 @@
+{
+  "name": "wordreference",
+  "version": "1.0.0",
+  "description": "A Node implimentation of n-wissam's wordreference python script",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wordreference",
+    "translation",
+    "dictionary"
+  ],
+  "author": "Adam Thomas Howard",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^2.8.4",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0"
+  }
+}
