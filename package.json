@@ -1,9 +1,9 @@
 {
   "name": "wordreference",
-  "version": "1.0.0",
-  "description": "A Node implimentation of n-wissam's wordreference python script",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "1.0.5",
+  "description": "A Node solution for retrieving wordreference translations",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",

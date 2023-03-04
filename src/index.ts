@@ -113,6 +113,8 @@ export const defineWord = async (word: string, dict_code: string) => {
     if ($row.hasClass("wrtopsection")) {
       if (section) {
         if (currentTranslation) section.translations.push(currentTranslation);
+        currentTranslation = null;
+        lastRowSelector = null;
         sections.push(section);
       }
 
@@ -121,12 +123,13 @@ export const defineWord = async (word: string, dict_code: string) => {
         translations: [],
       };
 
+
       return;
     }
 
     assignLastRowSelector($row, () => {
       translation_number++;
-      if (example && currentTranslation) currentTranslation.examples.push(example);
+      if (example && JSON.stringify(example) !== "{}" && currentTranslation) currentTranslation.examples.push(example);
       if (currentTranslation) (section as Section).translations.push(currentTranslation);
       currentTranslation = null;
       example = {};
@@ -175,7 +178,7 @@ export const defineWord = async (word: string, dict_code: string) => {
       } else if ($col.hasClass("ToWrd")) {
         currentMeaning.pos = $col.find(".POS2").text().trim();
         $col.find(".POS2").remove();
-        currentMeaning.word = $col.text().trim();
+        currentMeaning.word = $col.text().trim().replace('⇒', '');
       } else {
         const meaningSense = $col.find(".dsense").text().trim().replace(/[\(\)]/g, "");
         $col.find(".dsense").remove();
