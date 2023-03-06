@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Cheerio, Element, load } from 'cheerio';
 import { WRDictionary, WRDictionaryKey, wrDictionaryLookup } from './dictionaries';
 
-export const URL = 'https://www.wordreference.com';
+const URL = 'https://www.wordreference.com';
 
 export type Parity = 'odd' | 'even';
 
@@ -30,7 +30,13 @@ export interface Section {
   translations: Translation[];
 }
 
-export const isEmptyWord = (word: Word): boolean => {
+export interface WRTranslation {
+  inputWord: string;
+  sections: Section[];
+  audioLinks: string[];
+}
+
+const isEmptyWord = (word: Word): boolean => {
   if (word.word && word.word !== '') return false;
   if (word.pos && word.pos !== '') return false;
   if (word.sense && word.sense !== '') return false;
@@ -44,16 +50,28 @@ const deltaParity = ($row: Cheerio<Element>, lastRowSelector: Parity | null, onC
   }
 };
 
-export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRDictionary) => {
+const formRequestURL = (dictionary:WRDictionaryKey, word:string):string => {
+  if(/enes/.test(dictionary)) {
+    return URL + "/es/translation.asp?tranword=" + word;
+  }
+
+  if(/enes|esen/.test(dictionary)) {
+    return URL + "/es/en/translation.asp?spen=" + word;
+  }
+
+  return URL + '/' + dictionary + '/' + word;
+}
+
+export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRDictionary): Promise<WRTranslation> => {
   const dictionaryLookup = Object.entries(wrDictionaryLookup);
   if (dictionaryLookup.some(([_key, value]) => value === dictionary)) {
-    const entry = dictionaryLookup.find(([key, value]) => value === dictionary) as unknown as WRDictionaryKey;
+    const entry = (dictionaryLookup.find(([key, value]) => value === dictionary) || [])[0] as WRDictionaryKey;
     dictionary = entry;
   } else if (!dictionaryLookup.some(([key]) => key === dictionary)) {
     throw new Error('Improper dictionary reference given');
   }
 
-  const requestURL = URL + '/' + dictionary + '/' + word;
+  const requestURL = formRequestURL(dictionary as WRDictionaryKey, word);
   const page = await axios.get(requestURL);
 
   if (page.data === undefined) throw Error(`Failed to fetch page at ${requestURL}`);
