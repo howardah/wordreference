@@ -10,7 +10,6 @@ import { defineWord } from "wordreference";
 
 const definition = await defineWord("fish", "English-French");
 
-
 console.log(definition);
 
 // {
