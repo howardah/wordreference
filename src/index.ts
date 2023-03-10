@@ -2,8 +2,6 @@ import axios from 'axios';
 import { Cheerio, Element, load } from 'cheerio';
 import { WRDictionary, WRDictionaryKey, wrDictionaryLookup } from './dictionaries';
 
-const URL = 'https://www.wordreference.com';
-
 export type Parity = 'odd' | 'even';
 
 export interface Word {
@@ -36,21 +34,23 @@ export interface WRTranslation {
   audioLinks: string[];
 }
 
-const isEmptyWord = (word: Word): boolean => {
+const URL = 'https://www.wordreference.com';
+
+export const isEmptyWord = (word: Word): boolean => {
   if (word.word && word.word !== '') return false;
   if (word.pos && word.pos !== '') return false;
   if (word.sense && word.sense !== '') return false;
   return true;
 };
 
-const deltaParity = ($row: Cheerio<Element>, lastRowSelector: Parity | null, onChange: (rowSelector: Parity) => void) => {
+export const deltaParity = ($row: Cheerio<Element>, lastRowSelector: Parity | null, onChange: (rowSelector: Parity) => void) => {
   const current: Parity = $row.hasClass('odd') ? 'odd' : 'even';
   if (!lastRowSelector || current !== lastRowSelector) {
     onChange(current);
   }
 };
 
-const formRequestURL = (dictionary:WRDictionaryKey, word:string):string => {
+export const formRequestURL = (dictionary:WRDictionaryKey, word:string):string => {
   if(/enes/.test(dictionary)) {
     return URL + "/es/translation.asp?tranword=" + word;
   }
@@ -65,7 +65,7 @@ const formRequestURL = (dictionary:WRDictionaryKey, word:string):string => {
 export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRDictionary): Promise<WRTranslation> => {
   const dictionaryLookup = Object.entries(wrDictionaryLookup);
   if (dictionaryLookup.some(([_key, value]) => value === dictionary)) {
-    const entry = (dictionaryLookup.find(([key, value]) => value === dictionary) || [])[0] as WRDictionaryKey;
+    const entry = (dictionaryLookup.find(([_key, value]) => value === dictionary) as WRDictionaryKey[])[0];
     dictionary = entry;
   } else if (!dictionaryLookup.some(([key]) => key === dictionary)) {
     throw new Error('Improper dictionary reference given');
@@ -74,7 +74,7 @@ export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRD
   const requestURL = formRequestURL(dictionary as WRDictionaryKey, word);
   const page = await axios.get(requestURL);
 
-  if (page.data === undefined) throw Error(`Failed to fetch page at ${requestURL}`);
+  if (page.data === undefined) throw new Error(`Failed to fetch page at ${requestURL}`);
   const $ = load(page.data);
   const results = $('tr.wrtopsection, tr.odd, tr.even').not('.more').toArray();
 
@@ -82,19 +82,24 @@ export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRD
   let section: undefined | Section;
   let currentTranslation: null | Translation;
   let example: Example = {};
-  let translation_number = 0;
-  let row_in_current = 0;
+  let rowInCurrent = 0;
 
   let lastRowSelector: Parity | null;
+  
+  const resetCatchers = () => {
+    if (example && JSON.stringify(example) !== '{}' && currentTranslation) currentTranslation.examples.push(example);
+    if (currentTranslation) (section as Section).translations.push(currentTranslation);
+    currentTranslation = null;
+    example = {};
+  }
 
   results.forEach((row) => {
     const $row = $(row);
-    row_in_current++;
+    rowInCurrent++;
 
     if ($row.hasClass('wrtopsection')) {
       if (section) {
-        if (currentTranslation) section.translations.push(currentTranslation);
-        currentTranslation = null;
+        resetCatchers();
         lastRowSelector = null;
         sections.push(section);
       }
@@ -109,12 +114,8 @@ export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRD
 
     deltaParity($row, lastRowSelector, (rowSelector) => {
       lastRowSelector = rowSelector;
-      translation_number++;
-      if (example && JSON.stringify(example) !== '{}' && currentTranslation) currentTranslation.examples.push(example);
-      if (currentTranslation) (section as Section).translations.push(currentTranslation);
-      currentTranslation = null;
-      example = {};
-      row_in_current = 1;
+      resetCatchers();
+      rowInCurrent = 1;
     });
 
     if (!currentTranslation) {
@@ -144,14 +145,13 @@ export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRD
       return;
     }
 
-    const columns = $row.children();
+    const columns = $row.children().toArray();
     const currentMeaning: Word = {
       word: '',
       pos: '',
     };
 
-    for (let i = 0; i < columns.length; i++) {
-      const col = columns[i];
+    for (const col of columns) {
       const $col = $(col);
       if ($col.hasClass('FrWrd')) {
         currentTranslation.word.word = $col.find('strong').text().trim().replace('⇒', '');
@@ -173,10 +173,10 @@ export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRD
         $col.find('.Fr2').remove();
         if (sense !== '') currentTranslation.word.sense = sense;
 
-        const note = $col.find('.notePubl').text().trim();
+        const note = $col.hasClass('notePubl') ? $col.text().trim() : '';
         if (note !== '') currentTranslation.note = note;
 
-        if (row_in_current === 1)
+        if (rowInCurrent === 1)
           currentTranslation.definition = $col
             .text()
             .trim()

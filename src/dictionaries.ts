@@ -1,4 +1,4 @@
-export type LanguageKey = 'en';
+
 
 export type WRDictionaryKey =
   | 'enar'
