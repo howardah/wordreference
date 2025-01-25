@@ -3535,6 +3535,17 @@ export const etreJSON = {
           ],
           examples: [],
         },
+        {
+          word: { word: "être à l'affût de [qch]", pos: 'loc v + prép', sense: 'figuré' },
+          definition: 'guetter [qch]',
+          meanings: [{ word: 'be on the lookout for', pos: 'v expr' }],
+          examples: [
+            {
+              phrase: "Je suis toujours à l'affût des dernières nouveautés en matière d'électronique.",
+              translations: ["I'm always on the lookout for the latest developments in electronics."],
+            },
+          ],
+        },
       ],
     },
   ],
