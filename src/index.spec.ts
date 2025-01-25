@@ -24,7 +24,7 @@ describe('Properly formats wordreference page as JSON', () => {
     });
 
     const definition = await defineWord('fish', 'English-French');
-    // fswriteFileSync('fishEnFr.json', JSON.stringify(definition));
+    // fs.writeFileSync('fishEnFr.json', JSON.stringify(definition));
     expect(JSON.stringify(definition)).toBe(JSON.stringify(fishEnFrJSON));
   });
 
@@ -34,7 +34,7 @@ describe('Properly formats wordreference page as JSON', () => {
     });
 
     const definition = await defineWord('etre', 'French-English');
-    // fswriteFileSync('etre.json', JSON.stringify(definition));
+    // fs.writeFileSync('etre.json', JSON.stringify(definition));
     expect(JSON.stringify(definition)).toBe(JSON.stringify(etreJSON));
   });
 
@@ -44,7 +44,7 @@ describe('Properly formats wordreference page as JSON', () => {
     });
 
     const definition = await defineWord('fish', 'English-Spanish');
-    // fswriteFileSync('fishEnEs.json', JSON.stringify(definition));
+    // fs.writeFileSync('fishEnEs.json', JSON.stringify(definition));
     expect(JSON.stringify(definition)).toBe(JSON.stringify(fishEnEsJSON));
   });
 
@@ -54,7 +54,7 @@ describe('Properly formats wordreference page as JSON', () => {
     });
 
     const definition = await defineWord('pez', 'esen');
-    // fswriteFileSync('fishEsEn.json', JSON.stringify(definition));
+    // fs.writeFileSync('fishEsEn.json', JSON.stringify(definition));
     expect(JSON.stringify(definition)).toBe(JSON.stringify(fishEsEnJSON));
   });
 });
@@ -66,7 +66,7 @@ describe('Edge cases', () => {
     });
 
     const definition = await defineWord('fish', 'Spanish-English');
-    // fswriteFileSync('fishDoubleExample.json', JSON.stringify(definition));
+    // fs.writeFileSync('fishDoubleExample.json', JSON.stringify(definition));
     expect(JSON.stringify(definition)).toBe(JSON.stringify(fishDoubleExampleJSON));
   });
 });

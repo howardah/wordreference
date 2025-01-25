@@ -187,6 +187,8 @@ export const defineWord = async (word: string, dictionary: WRDictionaryKey | WRD
     if (!isEmptyWord(currentMeaning)) currentTranslation.meanings.push(currentMeaning);
   });
 
+  resetCatchers();
+
   if (section) sections.push(section);
 
   const audioWidget = $('#listen_widget');

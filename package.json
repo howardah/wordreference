@@ -1,6 +1,6 @@
 {
   "name": "wordreference",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A Node solution for retrieving wordreference translations",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

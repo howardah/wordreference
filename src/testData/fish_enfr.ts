@@ -2415,7 +2415,11 @@ export const fishEnFrJSON = {
       title: 'Formes composées',
       translations: [
         {
-          word: { word: 'a different kettle of fish, another kettle of fish', pos: 'n', sense: 'figurative, informal' },
+          word: {
+            word: 'a different kettle of fish, another kettle of fish',
+            pos: 'n',
+            sense: 'figurative, informal',
+          },
           definition: 'entirely different matter, thing',
           meanings: [
             { word: 'une autre paire de manches', pos: 'expr', sense: 'figuré, familier' },
@@ -3036,6 +3040,12 @@ export const fishEnFrJSON = {
           word: { word: 'white fish', pos: 'n' },
           definition: 'term for many varieties of edible fish',
           meanings: [{ word: 'poisson à chair blanche', pos: 'nm' }],
+          examples: [],
+        },
+        {
+          word: { word: 'zonal geranium, fish geranium', pos: 'n' },
+          definition: 'plant: Pelargonium hortorum',
+          meanings: [{ word: 'géranium zonale', pos: 'nm', sense: 'plante' }],
           examples: [],
         },
       ],

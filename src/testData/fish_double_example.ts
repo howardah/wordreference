@@ -2139,6 +2139,17 @@ export const fishDoubleExampleJSON = {
             },
           ],
         },
+        {
+          word: { word: 'pez manta', pos: 'loc nom m' },
+          definition: 'pez marino',
+          meanings: [{ word: 'manta ray', pos: 'n' }],
+          examples: [
+            {
+              phrase: 'El pez manta más grande habita en el Atlántico.',
+              translations: ['The largest manta ray lives in the Atlantic.'],
+            },
+          ],
+        },
       ],
     },
   ],

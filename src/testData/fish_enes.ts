@@ -2461,7 +2461,11 @@ export const fishEnEsJSON = {
       title: 'Compound Forms:',
       translations: [
         {
-          word: { word: 'a different kettle of fish, another kettle of fish', pos: 'n', sense: 'figurative, informal' },
+          word: {
+            word: 'a different kettle of fish, another kettle of fish',
+            pos: 'n',
+            sense: 'figurative, informal',
+          },
           definition: 'entirely different matter, thing',
           meanings: [{ word: 'harina de otro costal', pos: 'expr' }],
           examples: [],
@@ -3202,6 +3206,15 @@ export const fishEnEsJSON = {
           word: { word: 'white fish', pos: 'n' },
           definition: 'term for many varieties of edible fish',
           meanings: [{ word: 'pescado blanco', pos: 'nm + adj' }],
+          examples: [],
+        },
+        {
+          word: { word: 'zebrafish, zebra fish', pos: 'n' },
+          definition: 'type of fish',
+          meanings: [
+            { word: 'pez cebra', pos: 'loc nom m' },
+            { word: 'danio cebra', pos: 'loc nom m' },
+          ],
           examples: [],
         },
       ],
